@@ -129,8 +129,27 @@ export function importLockedSafes(safeList: SafeListModel): void {
     saveLockedSafe(lockedSafe).then(() => pushLockedSafe(safeList, lockedSafe))
   })
 }
-/*
-export async function createLockedSafe(name: string, masterPassword: string): Promise<SafeLockedModel> {
 
+export async function createLockedSafe(
+  safeList: SafeListModel,
+  name: string,
+  masterPassword: string,
+): Promise<SafeLockedModel> {
+  const unlockedSafe: SafeUnlockedModel = {
+    name: name,
+    masterCheckPhrase: await generateMasterCheckPhrase(masterPassword),
+    masterKey: await generateMasterKey(masterPassword),
+    masterSeed: await generateMasterSeed(masterPassword),
+    decryptedData: {
+      credentials: [],
+      transformers: [],
+    },
+  }
+
+  const lockedSafe = await lockSafe(unlockedSafe)
+
+  await saveLockedSafe(lockedSafe)
+  pushLockedSafe(safeList, lockedSafe)
+
+  return lockedSafe
 }
-*/
